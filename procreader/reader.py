@@ -362,7 +362,7 @@ class procreader(object):
         self.__processList__[process]["wchan"] = UNKNOWN
         
       if procStat != None:
-        procStatSplitted = procStat.split()
+        procStatSplitted =  [procStat.split(" (")[0]]+[procStat.split(" (")[1].split(") ")[0]]+procStat.split(") ")[1].split()
         nextJiffy = int(procStatSplitted[13]) + int(procStatSplitted[14])
         try:
           cpuUsage = round(((nextJiffy - self.__processList__[process]["prevJiffy"]) / (self.__deltaJiffies__ * 1.0)) * 100, 1)
@@ -392,7 +392,7 @@ class procreader(object):
         self.__processList__[process]["cpuUsageKernel"] = cpuUsageKernel
         self.__processList__[process]["prevJiffyKernel"] = nextJiffyKernel
         self.__processList__[process]["PPID"] = int(procStatSplitted[3])
-        self.__processList__[process]["name"] = procStatSplitted[1][1:].replace(")","")
+        self.__processList__[process]["name"] = procStatSplitted[1]
         
         self.__processList__[process]["Rss"] = totalRssMem
         self.__processList__[process]["history"].update(cpuUsage, cpuUsageKernel, totalRssMem, deltaio/1024,self.__processList__[process]["hasListener"])
